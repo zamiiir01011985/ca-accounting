@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Accounting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1em;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            background: white;
+            border-bottom: 3px solid #667eea;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .summary-box h3 {
+            margin-bottom: 10px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇮🇳 Indian Accounting System</h1>
+            <p>Complete Accounting, Payroll, Taxation & CA Reporting Solution</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('cashbook')">Cash Book</button>
+            <button class="tab" onclick="showTab('payroll')">Payroll</button>
+            <button class="tab" onclick="showTab('gst')">GST</button>
+            <button class="tab" onclick="showTab('tds')">TDS</button>
+            <button class="tab" onclick="showTab('income-tax')">Income Tax</button>
+            <button class="tab" onclick="showTab('reports')">CA Reports</button>
+        </div>
+
+        <div class="content">
+            <!-- Cash Book Tab -->
+            <div id="cashbook" class="tab-content active">
+                <h2>Cash Book Entry</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Add Transaction</h3>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="cb-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Type</label>
+                            <select id="cb-type">
+                                <option value="receipt">Receipt</option>
+                                <option value="payment">Payment</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Particulars</label>
+                            <input type="text" id="cb-particulars" placeholder="Description">
+                        </div>
+                        <div class="form-group">
+                            <label>Amount (₹)</label>
+                            <input type="number" id="cb-amount" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Mode</label>
+                            <select id="cb-mode">
+                                <option value="cash">Cash</option>
+                                <option value="bank">Bank</option>
+                                <option value="upi">UPI</option>
+                                <option value="cheque">Cheque</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="addCashEntry()">Add Entry</button>
+                    </div>
+                    <div class="card">
+                        <div class="summary-box">
+                            <h3>Cash Summary</h3>
+                            <div class="summary-item">
+                                <span>Total Receipts:</span>
+                                <strong id="total-receipts">₹0.00</strong>
+                            </div>
+                            <div class="summary-item">
+                                <span>Total Payments:</span>
+                                <strong id="total-payments">₹0.00</strong>
+                            </div>
+                            <div class="summary-item">
+                                <span>Balance:</span>
+                                <strong id="cash-balance">₹0.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="cash-table"></div>
+            </div>
+
+            <!-- Payroll Tab -->
+            <div id="payroll" class="tab-content">
+                <h2>Payroll Management</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Add Employee Salary</h3>
+                        <div class="form-group">
+                            <label>Employee Name</label>
+                            <input type="text" id="emp-name" placeholder="Full Name">
+                        </div>
+                        <div class="form-group">
+                            <label>PAN Number</label>
+                            <input type="text" id="emp-pan" placeholder="ABCDE1234F">
+                        </div>
+                        <div class="form-group">
+                            <label>Month</label>
+                            <input type="month" id="emp-month">
+                        </div>
+                        <div class="form-group">
+                            <label>Basic Salary (₹)</label>
+                            <input type="number" id="emp-basic" placeholder="0.00" onchange="calculateSalary()">
+                        </div>
+                        <div class="form-group">
+                            <label>HRA (₹)</label>
+                            <input type="number" id="emp-hra" placeholder="0.00" onchange="calculateSalary()">
+                        </div>
+                        <div class="form-group">
+                            <label>Other Allowances (₹)</label>
+                            <input type="number" id="emp-allowances" placeholder="0.00" onchange="calculateSalary()">
+                        </div>
+                        <div class="form-group">
+                            <label>PF Deduction (₹)</label>
+                            <input type="number" id="emp-pf" placeholder="0.00" onchange="calculateSalary()">
+                        </div>
+                        <div class="form-group">
+                            <label>Professional Tax (₹)</label>
+                            <input type="number" id="emp-pt" placeholder="0.00" onchange="calculateSalary()">
+                        </div>
+                        <div class="form-group">
+                            <label>TDS (₹)</label>
+                            <input type="number" id="emp-tds" placeholder="0.00" onchange="calculateSalary()">
+                        </div>
+                        <div class="form-group">
+                            <label><strong>Net Salary (₹)</strong></label>
+                            <input type="number" id="emp-net" readonly style="background: #f8f9fa; font-weight: bold;">
+                        </div>
+                        <button class="btn btn-primary" onclick="addPayroll()">Add Payroll</button>
+                    </div>
+                </div>
+                <div id="payroll-table"></div>
+            </div>
+
+            <!-- GST Tab -->
+            <div id="gst" class="tab-content">
+                <h2>GST Management</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Add GST Transaction</h3>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="gst-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Type</label>
+                            <select id="gst-type">
+                                <option value="sales">Sales (Output GST)</option>
+                                <option value="purchase">Purchase (Input GST)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Party Name</label>
+                            <input type="text" id="gst-party" placeholder="Customer/Vendor Name">
+                        </div>
+                        <div class="form-group">
+                            <label>GSTIN</label>
+                            <input type="text" id="gst-gstin" placeholder="22AAAAA0000A1Z5">
+                        </div>
+                        <div class="form-group">
+                            <label>Taxable Amount (₹)</label>
+                            <input type="number" id="gst-taxable" placeholder="0.00" onchange="calculateGST()">
+                        </div>
+                        <div class="form-group">
+                            <label>GST Rate (%)</label>
+                            <select id="gst-rate" onchange="calculateGST()">
+                                <option value="0">0%</option>
+                                <option value="5">5%</option>
+                                <option value="12">12%</option>
+                                <option value="18">18%</option>
+                                <option value="28">28%</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>CGST (₹)</label>
+                            <input type="number" id="gst-cgst" readonly style="background: #f8f9fa;">
+                        </div>
+                        <div class="form-group">
+                            <label>SGST (₹)</label>
+                            <input type="number" id="gst-sgst" readonly style="background: #f8f9fa;">
+                        </div>
+                        <div class="form-group">
+                            <label>Total Amount (₹)</label>
+                            <input type="number" id="gst-total" readonly
+                                style="background: #f8f9fa; font-weight: bold;">
+                        </div>
+                        <button class="btn btn-primary" onclick="addGST()">Add GST Entry</button>
+                    </div>
+                    <div class="card">
+                        <div class="summary-box">
+                            <h3>GST Summary</h3>
+                            <div class="summary-item">
+                                <span>Output GST:</span>
+                                <strong id="output-gst">₹0.00</strong>
+                            </div>
+                            <div class="summary-item">
+                                <span>Input GST:</span>
+                                <strong id="input-gst">₹0.00</strong>
+                            </div>
+                            <div class="summary-item">
+                                <span>GST Payable:</span>
+                                <strong id="gst-payable">₹0.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="gst-table"></div>
+            </div>
+
+            <!-- TDS Tab -->
+            <div id="tds" class="tab-content">
+                <h2>TDS Management</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Add TDS Entry</h3>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="tds-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Deductee Name</label>
+                            <input type="text" id="tds-deductee" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label>PAN Number</label>
+                            <input type="text" id="tds-pan" placeholder="ABCDE1234F">
+                        </div>
+                        <div class="form-group">
+                            <label>Section</label>
+                            <select id="tds-section">
+                                <option value="194A">194A - Interest</option>
+                                <option value="194C">194C - Contractor</option>
+                                <option value="194H">194H - Commission</option>
+                                <option value="194I">194I - Rent</option>
+                                <option value="194J">194J - Professional Fees</option>
+                                <option value="192">192 - Salary</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Amount Paid (₹)</label>
+                            <input type="number" id="tds-amount" placeholder="0.00" onchange="calculateTDS()">
+                        </div>
+                        <div class="form-group">
+                            <label>TDS Rate (%)</label>
+                            <input type="number" id="tds-rate" placeholder="10" onchange="calculateTDS()">
+                        </div>
+                        <div class="form-group">
+                            <label>TDS Amount (₹)</label>
+                            <input type="number" id="tds-tds-amount" readonly
+                                style="background: #f8f9fa; font-weight: bold;">
+                        </div>
+                        <button class="btn btn-primary" onclick="addTDS()">Add TDS Entry</button>
+                    </div>
+                    <div class="card">
+                        <div class="summary-box">
+                            <h3>TDS Summary</h3>
+                            <div class="summary-item">
+                                <span>Total TDS Deducted:</span>
+                                <strong id="total-tds">₹0.00</strong>
+                            </div>
+                            <div class="summary-item">
+                                <span>Total Amount Paid:</span>
+                                <strong id="total-tds-amount">₹0.00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tds-table"></div>
+            </div>
+
+            <!-- Income Tax Tab -->
+            <div id="income-tax" class="tab-content">
+                <h2>Income Tax Calculator</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Calculate Tax Liability</h3>
+                        <div class="form-group">
+                            <label>Assessment Year</label>
+                            <select id="it-ay">
+                                <option value="2024-25">2024-25</option>
+                                <option value="2025-26">2025-26</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tax Regime</label>
+                            <select id="it-regime">
+                                <option value="old">Old Regime</option>
+                                <option value="new">New Regime</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Gross Income (₹)</label>
+                            <input type="number" id="it-income" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Deductions u/s 80C (₹)</label>
+                            <input type="number" id="it-80c" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Other Deductions (₹)</label>
+                            <input type="number" id="it-other" placeholder="0.00">
+                        </div>
+                        <button class="btn btn-primary" onclick="calculateIncomeTax()">Calculate Tax</button>
+                    </div>
+                    <div class="card">
+                        <div class="summary-box">
+                            <h3>Tax Calculation</h3>
+                            <div id="tax-breakdown"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CA Reports Tab -->
+            <div id="reports" class="tab-content">
+                <h2>CA Reporting & Export</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Generate Reports</h3>
+                        <div class="form-group">
+                            <label>Report Type</label>
+                            <select id="report-type">
+                                <option value="cashbook">Cash Book</option>
+                                <option value="payroll">Payroll Summary</option>
+                                <option value="gst">GST Return</option>
+                                <option value="tds">TDS Summary</option>
+                                <option value="complete">Complete Accounts</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>From Date</label>
+                            <input type="date" id="report-from">
+                        </div>
+                        <div class="form-group">
+                            <label>To Date</label>
+                            <input type="date" id="report-to">
+                        </div>
+                        <button class="btn btn-success" onclick="generateReport()">Generate Report</button>
+                        <button class="btn btn-primary" onclick="exportToExcel()">Export to Excel</button>
+                    </div>
+                </div>
+                <div id="report-output"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+            cashbook: [],
+            payroll: [],
+            gst: [],
+            tds: []
+        };
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function addCashEntry() {
+            const entry = {
+                date: document.getElementById('cb-date').value,
+                type: document.getElementById('cb-type').value,
+                particulars: document.getElementById('cb-particulars').value,
+                amount: parseFloat(document.getElementById('cb-amount').value) || 0,
+                mode: document.getElementById('cb-mode').value
+            };
+
+            if (!entry.date || !entry.particulars || entry.amount <= 0) {
+                alert('Please fill all fields correctly');
+                return;
+            }
+
+            data.cashbook.push(entry);
+            updateCashTable();
+            clearCashForm();
+        }
+
+        function updateCashTable() {
+            let receipts = 0;
+            let payments = 0;
+
+            let html = '<table><tr><th>Date</th><th>Particulars</th><th>Mode</th><th>Receipt</th><th>Payment</th><th>Action</th></tr>';
+
+            data.cashbook.forEach((entry, index) => {
+                const amount = entry.amount;
+                if (entry.type === 'receipt') receipts += amount;
+                else payments += amount;
+
+                html += `<tr>
+                    <td>${entry.date}</td>
+                    <td>${entry.particulars}</td>
+                    <td>${entry.mode.toUpperCase()}</td>
+                    <td>${entry.type === 'receipt' ? '₹' + amount.toFixed(2) : '-'}</td>
+                    <td>${entry.type === 'payment' ? '₹' + amount.toFixed(2) : '-'}</td>
+                    <td><button class="delete-btn" onclick="deleteEntry('cashbook', ${index})">Delete</button></td>
+                </tr>`;
+            });
+
+            html += '</table>';
+            document.getElementById('cash-table').innerHTML = html;
+
+            document.getElementById('total-receipts').textContent = '₹' + receipts.toFixed(2);
+            document.getElementById('total-payments').textContent = '₹' + payments.toFixed(2);
+            document.getElementById('cash-balance').textContent = '₹' + (receipts - payments).toFixed(2);
+        }
+
+        function clearCashForm() {
+            document.getElementById('cb-date').value = '';
+            document.getElementById('cb-particulars').value = '';
+            document.getElementById('cb-amount').value = '';
+        }
+
+        function calculateSalary() {
+            const basic = parseFloat(document.getElementById('emp-basic').value) || 0;
+            const hra = parseFloat(document.getElementById('emp-hra').value) || 0;
+            const allowances = parseFloat(document.getElementById('emp-allowances').value) || 0;
+            const pf = parseFloat(document.getElementById('emp-pf').value) || 0;
+            const pt = parseFloat(document.getElementById('emp-pt').value) || 0;
+            const tds = parseFloat(document.getElementById('emp-tds').value) || 0;
+
+            const gross = basic + hra + allowances;
+            const deductions = pf + pt + tds;
+            const net = gross - deductions;
+
+            document.getElementById('emp-net').value = net.toFixed(2);
+        }
+
+        function addPayroll() {
+            const entry = {
+                name: document.getElementById('emp-name').value,
+                pan: document.getElementById('emp-pan').value,
+                month: document.getElementById('emp-month').value,
+                basic: parseFloat(document.getElementById('emp-basic').value) || 0,
+                hra: parseFloat(document.getElementById('emp-hra').value) || 0,
+                allowances: parseFloat(document.getElementById('emp-allowances').value) || 0,
+                pf: parseFloat(document.getElementById('emp-pf').value) || 0,
+                pt: parseFloat(document.getElementById('emp-pt').value) || 0,
+                tds: parseFloat(document.getElementById('emp-tds').value) || 0,
+                net: parseFloat(document.getElementById('emp-net').value) || 0
+            };
+
+            if (!entry.name || !entry.month) {
+                alert('Please fill required fields');
+                return;
+            }
+
+            data.payroll.push(entry);
+            updatePayrollTable();
+        }
+
+        function updatePayrollTable() {
+            let html = '<table><tr><th>Name</th><th>PAN</th><th>Month</th><th>Basic</th><th>HRA</th><th>Allowances</th><th>PF</th><th>PT</th><th>TDS</th><th>Net Salary</th><th>Action</th></tr>';
+
+            data.payroll.forEach((entry, index) => {
+                html += `<tr>
+                    <td>${entry.name}</td>
+                    <td>${entry.pan}</td>
+                    <td>${entry.month}</td>
+                    <td>₹${entry.basic.toFixed(2)}</td>
+                    <td>₹${entry.hra.toFixed(2)}</td>
+                    <td>₹${entry.allowances.toFixed(2)}</td>
+                    <td>₹${entry.pf.toFixed(2)}</td>
+                    <td>₹${entry.pt.toFixed(2)}</td>
+                    <td>₹${entry.tds.toFixed(2)}</td>
+                    <td><strong>₹${entry.net.toFixed(2)}</strong></td>
+                    <td><button class="delete-btn" onclick="deleteEntry('payroll', ${index})">Delete</button></td>
+                </tr>`;
+            });
+
+            html += '</table>';
+            document.getElementById('payroll-table').innerHTML = html;
+        }
+
+        function calculateGST() {
+            const taxable = parseFloat(document.getElementById('gst-taxable').value) || 0;
+            const rate = parseFloat(document.getElementById('gst-rate').value) || 0;
+
+            const gstAmount = (taxable * rate) / 100;
+            const cgst = gstAmount / 2;
+            const sgst = gstAmount / 2;
+            const total = taxable + gstAmount;
+
+            document.getElementById('gst-cgst').value = cgst.toFixed(2);
+            document.getElementById('gst-sgst').value = sgst.toFixed(2);
+            document.getElementById('gst-total').value = total.toFixed(2);
+        }
+
+        function addGST() {
+            const entry = {
+                date: document.getElementById('gst-date').value,
+                type: document.getElementById('gst-type').value,
+                party: document.getElementById('gst-party').value,
+                gstin: document.getElementById('gst-gstin').value,
+                taxable: parseFloat(document.getElementById('gst-taxable').value) || 0,
+                rate: parseFloat(document.getElementById('gst-rate').value) || 0,
+                cgst: parseFloat(document.getElementById('gst-cgst').value) || 0,
+                sgst: parseFloat(document.getElementById('gst-sgst').value) || 0,
+                total: parseFloat(document.getElementById('gst-total').value) || 0
+            };
+
+            if (!entry.date || !entry.party) {
+                alert('Please fill required fields');
+                return;
+            }
+
+            data.gst.push(entry);
+            updateGSTTable();
+        }
+
+        function updateGSTTable() {
+            let outputGST = 0;
+            let inputGST = 0;
+
+            let html = '<table><tr><th>Date</th><th>Type</th><th>Party</th><th>GSTIN</th><th>Taxable</th><th>Rate</th><th>CGST</th><th>SGST</th><th>Total</th><th>Action</th></tr>';
+
+            data.gst.forEach((entry, index) => {
+                const gstAmount = entry.cgst + entry.sgst;
+                if (entry.type === 'sales') outputGST += gstAmount;
+                else inputGST += gstAmount;
+
+                html += `<tr>
+                    <td>${entry.date}</td>
+                    <td>${entry.type.toUpperCase()}</td>
+                    <td>${entry.party}</td>
+                    <td>${entry.gstin}</td>
+                    <td>₹${entry.taxable.toFixed(2)}</td>
+                    <td>${entry.rate}%</td>
+                    <td>₹${entry.cgst.toFixed(2)}</td>
+                    <td>
